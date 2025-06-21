@@ -90,13 +90,13 @@ const {ASTRA_DB_NAMESPACE,
       generatedText = "Sorry, I couldn't generate a response.";
     }
     // Return in the format expected by useChat from @ai-sdk/react (array of messages, not wrapped in an object)
-    return new Response(JSON.stringify([
+    return new Response(JSON.stringify(
       {
         id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2),
         role: "assistant",
         content: generatedText
       }
-    ]), { status: 200 });
+    ), { status: 200 });
 
 
 
@@ -105,4 +105,3 @@ const {ASTRA_DB_NAMESPACE,
             console.log(err)
         }
     }
-
