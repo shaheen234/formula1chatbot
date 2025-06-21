@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import F1logo from "./assets/f1logo.png"
-import {useChat} from "ai/react"
+import {useChat} from "@ai-sdk/react"
 import { Message } from "ai"
 import Bubble from "./components/Bubble"
 import PromptSuggestionRow from "./components/PromptSuggestionRow"
@@ -9,17 +9,17 @@ import LoadingBubble from "./components/LoadingBubble"
 
 // import background from "./assets/background.jpeg"
 const Home =()=>{
-    
-    const {append,input,isLoading,messages,handleInputChange,handleSubmit}=useChat()
-    const noMessages=!messages || messages.length===0
+    const {append,input,isLoading,messages,handleInputChange,handleSubmit}=useChat({
+        api: '/api/chat'
+    });
+    const noMessages=!messages || messages.length===0;
     const handlePrompt=(promptText)=>{
-        const msg: Message={
-            id: crypto.randomUUID(),
-            content:promptText,
-            role:"user"
-        }
-        append(msg)
-    }
+        append({
+            content: promptText,
+            role: "user"
+        });
+    };
+    console.log('messages', messages);
     return (
         <main>
             <Image src={F1logo} width="250" alt="F1GPT Logo"/>
@@ -36,7 +36,9 @@ const Home =()=>{
                 </>
                 ):(
                     <>
-                    {messages.map((message,index)=><Bubble key={`message-${index}`} message={message}/>)}
+                    {messages.map((message, index) => (
+                        <Bubble key={message.id || index} message={message} />
+                    ))}
                     {isLoading && <LoadingBubble/>}
                     </>
                 )}
