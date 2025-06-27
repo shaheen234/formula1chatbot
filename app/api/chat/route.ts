@@ -1,6 +1,5 @@
-import { LangChainAdapter } from 'ai'
 import { DataAPIClient } from "@datastax/astra-db-ts"
-import { HfInference } from "@huggingface/inference"
+// import { HfInference } from "@huggingface/inference"
 
 const {ASTRA_DB_NAMESPACE,
     ASTRA_DB_COLLECTION,
@@ -8,7 +7,7 @@ const {ASTRA_DB_NAMESPACE,
     ASTRA_DB_APPLICATION_TOKEN,
     HUGGINGFACE_API_KEY
     }=process.env
-    const hf = new HfInference(HUGGINGFACE_API_KEY || "")
+    // const hf = new HfInference(HUGGINGFACE_API_KEY || "")
 
     const client= new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN)
     const db=client.db(ASTRA_DB_API_ENDPOINT,{namespace:ASTRA_DB_NAMESPACE})
