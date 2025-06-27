@@ -57,7 +57,7 @@ const {ASTRA_DB_NAMESPACE,
       docContext = "";
     }
 
-    const template = `You are an AI assistant who knows everything about Formula One.\n\nUse the below context to augment what you know about Formula One racing.\nThe context will provide you with the most recent page data from Wikipedia,\nthe official F1 website and others.\nIf the context doesn't include the information you need answer based on your\nexisting knowledge and don't mention the source of your information or\nwhat the context does or doesn't include.\n\n---------------\nSTART CONTEXT\n${docContext}\nEND CONTEXT\n---------------\nQUESTION:${latestmessages}\n---------------`;
+    const template = `You are an AI assistant who knows everything about Formula One.\n\nUse the below context to augment what you know about Formula One racing.\nThe context will provide you with the most recent page data from Wikipedia,\nthe official F1 website and others.\nIf the context doesn't include the information you need answer based on your\nexisting knowledge and don't mention the source of your information or\nwhat the context does or doesn't include.\n\n---------------\nSTART CONTEXT\n ${docContext} \nEND CONTEXT\n---------------\nQUESTION:${latestmessages}\n---------------`;
 
     const response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1",
       {
@@ -89,12 +89,14 @@ const {ASTRA_DB_NAMESPACE,
     } else {
       generatedText = "Sorry, I couldn't generate a response.";
     }
+    // Extract only the answer after the last context/question marker
+    const answer = generatedText.split('---------------').pop()?.trim() || generatedText.trim();
     // Return in the format expected by useChat from @ai-sdk/react (array of messages, not wrapped in an object)
     return new Response(JSON.stringify(
       {
         id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2),
         role: "assistant",
-        content: generatedText
+        content: answer
       }
     ), { status: 200 });
 
